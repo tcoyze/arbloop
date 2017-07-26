@@ -1,4 +1,4 @@
-# Arbloop :coffin:
+# Arbloop :money_with_wings:
 
 ---
 
