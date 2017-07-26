@@ -1,0 +1,7 @@
+click
+gdax
+gevent
+marshmallow
+pymongo
+python-dateutil
+-e git+https://github.com/veox/python2-krakenex.git#egg=krakenex
