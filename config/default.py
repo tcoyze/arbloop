@@ -20,7 +20,7 @@ MAX_TRADE_LIFE = 30 * 24 * 60 * 60  # 30 days in seconds
 
 MINIMUM_SPREAD = 0.01  # as a rate : (bid - ask) / ( bid + ask / 2)
 MINIMUM_PROFIT = 0.005  # initial minimum profit to use with decay function
-MAXIMUM_SLIPPAGE = 0.0005  # rate in between market price and average price
+MAXIMUM_SLIPPAGE = 0.001  # rate in between market price and average price
 
 ORDERBOOK_FACTOR = 3.0  # prevents stale orders ensuring liquidity exists
 
