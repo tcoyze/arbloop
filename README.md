@@ -112,8 +112,8 @@ Arbloop writes logs to `arbloop.log`
 
 Send your thots and prayers in crypto to:
 
-BTC:
+BTC: 1GW9AQ2aPTnA7EAEW1mjDnXTd975xy1vfZ
 
-ETH:
+ETH: 0xb9004149320A1EBDFe742b21c7d296962f99e420
 
-LTC:
+LTC: LZ15WAUsxYGjyLQyj8GeWGDT4nTerPSBPn
