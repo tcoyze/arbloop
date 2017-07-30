@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from collections import defaultdict
+
 import krakenex.api
 
 from arbloop import config
@@ -9,6 +11,12 @@ PAIR_MAPPINGS = {
     'BTC-USD': 'XXBTZUSD',
     'ETH-USD': 'XETHZUSD',
     'LTC-USD': 'XLTCZUSD',
+}
+
+REVERSE_PAIR_MAPPINGS = {
+    'XXBTZUSD': 'BTC-USD',
+    'XETHZUSD': 'ETH-USD',
+    'XLTCZUSD': 'LTC-USD',
 }
 
 CURRENCY_MAPPINGS = {
@@ -37,6 +45,8 @@ class Kraken(Exchange):
     private_client = kraken_client.query_private
     shortable = True
     account_balances = {}
+    update_time = None
+    tick = defaultdict(dict)
 
     def accounts(self):
         if not self.should_update:
@@ -95,18 +105,28 @@ class Kraken(Exchange):
         return self.private_client('QueryOrders', {'txid': id})
 
     def bid(self, product='BTC-USD'):
-        self.ticker(product=product)
+        self.ticker()
         return self.tick[product]['bid']
 
     def ask(self, product='BTC-USD'):
-        self.ticker(product=product)
+        self.ticker()
         return self.tick[product]['ask']
 
-    def ticker(self, product='BTC-USD'):
-        if not self.should_update:
+    def ticker(self):
+        if not self.should_update and self.tick and all(self.tick.values()):
             return
-        asset = PAIR_MAPPINGS[product]
-        result = self.public_client('Ticker', {'pair': asset})
-        self.tick[product]['ask'] = float(result['result'][asset]['a'][0])
-        self.tick[product]['bid'] = float(result['result'][asset]['b'][0])
+
+        result = self.public_client(
+            'Ticker',
+            {'pair': ','.join(PAIR_MAPPINGS.values())}
+        )
+
+        for asset, price_info in result['result'].iteritems():
+            standard_asset_name = REVERSE_PAIR_MAPPINGS[asset]
+            self.tick[standard_asset_name]['ask'] = float(price_info['a'][0])
+            self.tick[standard_asset_name]['bid'] = float(price_info['b'][0])
+
         return self.tick
+
+
+kraken = Kraken()

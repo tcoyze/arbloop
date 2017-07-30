@@ -9,8 +9,14 @@ from arbloop import config
 class Exchange(object):
     __metaclass__ = abc.ABCMeta
     poll_interval = config.EXCHANGE_POLL_INTERVAL
-    update_time = None
-    tick = defaultdict(dict)
+
+    @abc.abstractproperty
+    def update_time(self):
+        pass
+
+    @abc.abstractproperty
+    def tick(self):
+        pass
 
     @abc.abstractproperty
     def products(self):
@@ -29,15 +35,15 @@ class Exchange(object):
         pass
 
     @abc.abstractmethod
-    def orderbook(self):
+    def orderbook(self, product):
         pass
 
     @abc.abstractmethod
-    def buy(self):
+    def buy(self, price, size, product):
         pass
 
     @abc.abstractmethod
-    def sell(self):
+    def sell(self, price, size, product):
         pass
 
     @abc.abstractproperty
@@ -49,11 +55,11 @@ class Exchange(object):
         pass
 
     @abc.abstractproperty
-    def bid(self):
+    def bid(self, product):
         pass
 
     @abc.abstractproperty
-    def ask(self):
+    def ask(self, product):
         pass
 
     @abc.abstractmethod

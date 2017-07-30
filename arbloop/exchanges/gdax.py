@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
+from collections import defaultdict
+
 import gdax as gdax_client
 
 from arbloop import config
@@ -21,6 +23,8 @@ class GDAX(Exchange):
     )
     shortable = True
     account_balances = {}
+    update_time = None
+    tick = defaultdict(dict)
 
     def accounts(self):
         if not self.should_update:
@@ -42,7 +46,7 @@ class GDAX(Exchange):
         return self.account_balances[currency]
 
     def orderbook(self, product='BTC-USD'):
-        _orderbook = self.public_client.get_product_orderbook(
+        _orderbook = self.public_client.get_product_order_book(
             level=2,
             product_id=product
         )
@@ -50,7 +54,7 @@ class GDAX(Exchange):
         return self._clean_orderbook(_orderbook)
 
     def buy(self, price, size, product='BTC-USD'):
-        return self.private_client.buy({
+        return self.private_client.buy(**{
             'type': 'limit',
             'product': product,
             'price': price,
@@ -58,7 +62,7 @@ class GDAX(Exchange):
         })
 
     def sell(self, price, size, product='BTC-USD'):
-        return self.private_client.sell({
+        return self.private_client.sell(**{
             'type': 'limit',
             'product': product,
             'price': price,
@@ -72,18 +76,23 @@ class GDAX(Exchange):
         return self.private_client.get_order(id)
 
     def bid(self, product='BTC-USD'):
-        self.ticker(product=product)
+        self.ticker()
         return self.tick[product]['bid']
 
     def ask(self, product='BTC-USD'):
-        self.ticker(product=product)
+        self.ticker()
         return self.tick[product]['ask']
 
-    def ticker(self, product='BTC-USD'):
-        if not self.should_update:
+    def ticker(self):
+        if not self.should_update and self.tick and all(self.tick.values()):
             return self.tick
 
-        result = self.public_client.get_product_ticker(product_id=product)
-        self.tick[product]['bid'] = float(result['bid'])
-        self.tick[product]['ask'] = float(result['ask'])
+        for product in self.products:
+            result = self.public_client.get_product_ticker(product_id=product)
+            self.tick[product]['bid'] = float(result['bid'])
+            self.tick[product]['ask'] = float(result['ask'])
+
         return self.tick
+
+
+gdax = GDAX()

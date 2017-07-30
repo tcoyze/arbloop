@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-from .gdax import GDAX
-from .kraken import Kraken
+from .gdax import gdax
+from .kraken import kraken
 
 
 __all__ = [
-    GDAX,
-    Kraken,
+    gdax,
+    kraken,
 ]
