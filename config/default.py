@@ -13,7 +13,7 @@ TRADER_EXCHANGES = [
 TRADER_POLL_INTERVAL = 60  # in seconds
 
 MAXIMUM_BALANCE_EXPOSURE = .95  # in fraction of account balance allowed to trade
-MAXIMUM_EXPOSURE = 50  # in dollars per product per exchange
+MAXIMUM_EXPOSURE = 500  # in dollars per product per exchange
 EXPOSURE = 100  # in dollars per product per exchange
 
 MAX_TRADE_LIFE = 30 * 24 * 60 * 60  # 30 days in seconds

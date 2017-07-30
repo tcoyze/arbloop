@@ -168,7 +168,11 @@ class Trader(object):
             ba_spread >= self.minimum_spread,
         ])
         if not spread_conditions:
-            logging.debug('Spread conditions not met for %s' % self.product)
+            logging.debug(
+                'Spread conditions not met for {}'.format(
+                    self.product
+                )
+            )
             return
 
         spread = max([ab_spread, ba_spread])
@@ -243,7 +247,12 @@ class Trader(object):
         )
 
         if limit_spread < self.minimum_spread:
-            logging.debug('Limit Order Spread less than minimum limit spread')
+            logging.debug(
+                '{} Limit Order Spread less than minimum {}'.format(
+                    self.product,
+                    limit_spread
+                )
+            )
             return
 
         if self.live:
@@ -325,10 +334,6 @@ class Trader(object):
                 time.sleep(self.poll_interval)
         except KeyboardInterrupt:
             logging.info('Exiting ...')
-        except:
-            logging.error('Ratelimit hit ...')
-            logging.error('Sleeping for 10 minutes ...')
-            time.sleep(60*10)
 
     def check(self):
         orders = self.order_store.list({
@@ -352,7 +357,7 @@ class Trader(object):
             if self.product not in e.products:
                 continue
 
-            xch[e.name] = e()
+            xch[e.name] = e
 
         self._exchanges = xch
         return self._exchanges
