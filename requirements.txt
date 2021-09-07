@@ -4,7 +4,7 @@ gdax==1.0.6
 gevent==1.2.2
 greenlet==0.4.12
 -e git+https://github.com/veox/python2-krakenex.git@b9407a24cb14756a7965c5b9c288b00db7711cca#egg=krakenex
-marshmallow==2.13.5
+marshmallow==2.15.1
 pymongo==3.4.0
 python-dateutil==2.6.1
 requests==2.13.0
